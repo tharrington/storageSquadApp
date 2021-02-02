@@ -1,0 +1,7 @@
+{
+  "name": "storageSquadApp",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
