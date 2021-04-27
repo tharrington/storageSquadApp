@@ -6,15 +6,16 @@
 
 <ion-content>
   <ion-list>
-
-
     <ion-item>
       <ion-label color="primary" stacked>Email</ion-label>
       <ion-input placeholder="{{user.Email}}" [(ngModel)]="user.Email"></ion-input>
     </ion-item>
 
+
     <div class="ion-padding">
       <ion-button expand="full" fill="clear" (click)="login();">Login</ion-button>
     </div>
   </ion-list>
+
+  <p>{{errorMessage}}</p>
 </ion-content>

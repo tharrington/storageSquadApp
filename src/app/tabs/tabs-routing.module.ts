@@ -8,22 +8,16 @@ const routes: Routes = [
     component: TabsPage,
     children: [
       {
-        path: 'tab1',
-        loadChildren: () => import('../dispatch/dispatch-routing.module').then(m => m.DispatchPageRoutingModule)
+        path: 'dispatch',
+        children : [
+          { path: '', loadChildren: () => import('../dispatch/dispatch-routing.module').then(m => m.DispatchPageRoutingModule) },
+          { path: 'drivers', loadChildren: () => import('../drivers/drivers-routing.module').then(m => m.DriversPageRoutingModule) },
+        ]
       },
-
-      {
-        path: '',
-        redirectTo: '/tabs/tab1',
-        pathMatch: 'full'
-      }
+      { path: 'search', loadChildren: () => import('../search/search-routing.module').then(m => m.SearchPageRoutingModule) },
     ]
   },
-  {
-    path: '',
-    redirectTo: '/tabs/tab1',
-    pathMatch: 'full'
-  }
+  { path: '', redirectTo: '/tabs/dispatch', pathMatch: 'full' }
 ];
 
 @NgModule({

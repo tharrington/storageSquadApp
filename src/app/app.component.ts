@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
-
 import { Platform } from '@ionic/angular';
-// import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-// import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Router } from '@angular/router';
-
 import { Plugins, registerWebPlugin } from '@capacitor/core';
-const { Storage } = Plugins;
+import {DataService} from './api/data.service';
+const {
+  Storage
+} = Plugins;
 
 @Component({
   selector: 'app-root',
@@ -15,9 +14,8 @@ const { Storage } = Plugins;
 })
 export class AppComponent {
   constructor(private platform: Platform,
-              // private splashScreen: SplashScreen,
-              // private statusBar: StatusBar,
-              private router: Router
+      public dataService: DataService,
+      private router: Router
   ) {
     this.findToken();
   }
@@ -28,11 +26,12 @@ export class AppComponent {
     this.initializeApp(value);
   }
 
-  initializeApp(value : any) {
+  initializeApp(value: any) {
     this.platform.ready().then(() => {
       // this.statusBar.styleDefault();
       // this.splashScreen.hide();
       if(value) {
+
         this.router.navigateByUrl('/tabs/tabs/dispatch');
       }
     });
