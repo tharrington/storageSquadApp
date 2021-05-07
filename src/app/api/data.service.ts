@@ -21,6 +21,7 @@ import { HTTP } from '@ionic-native/http/ngx';
 })
 export class DataService {
   token: string;
+  driverToken: string;
   user: {};
   driver: any = {};
 
@@ -46,8 +47,6 @@ export class DataService {
         'Content-Type': 'application/json',
         'x-access-token': this.token
       };
-
-      console.log('### token: ' + JSON.stringify(this.token));
       let response;
       if(method === 'GET') {
         response = await this.http.get(endpoint, params, headers);
@@ -62,41 +61,6 @@ export class DataService {
         response = await this.http.delete(endpoint, params, headers);
       }
       return JSON.parse(response.data);
-      // let response;
-      // if(method === 'GET') {
-      //
-      //   await this.http.get(endpoint, body, headers)
-      //     .then(data => {
-      //       console.log('### data: ' + JSON.stringify(data));
-      //       response = data.data;
-      //     })
-      //     .catch(error => {
-      //
-      //       console.log(error.status);
-      //       console.log(error.error); // error message as string
-      //       console.log(error.headers);
-      //     });
-      //   // response = await this.nativeHttp.get(endpoint, params, headers);
-      // } else if(method === 'POST') {
-      //   // this.nativeHttp.setDataSerializer('json');
-      //   // response = await this.nativeHttp.post(endpoint, body, headers);
-      //
-      //   this.http.post(endpoint, body, headers)
-      //     .then(data => {
-      //       response = data.data;
-      //     })
-      //     .catch(error => {
-      //
-      //       console.log(error.status);
-      //       console.log(error.error); // error message as string
-      //       console.log(error.headers);
-      //     });
-      // } else if(method === 'PUT') {
-      //   // this.nativeHttp.setDataSerializer('json');
-      //   // response = await this.nativeHttp.put(endpoint, body, headers);
-      // }
-      //
-      // return JSON.parse(response.data);
     } catch (error) {
       console.error('### err status: ' + JSON.stringify(error));
     }
@@ -112,8 +76,25 @@ export class DataService {
     }
   }
 
+  async setDriverToken(token: any, user: any) {
+    this.driverToken = token;
+    if(!user) {
+      const { value } = await Storage.get({ key: 'driver' });
+      if(value) {
+        this.driver = JSON.parse(value);
+      }
+    }
+  }
+
   async findToken() {
     const { value } = await Storage.get({ key: 'token' });
+    if(value) {
+      this.setToken(JSON.parse(value), null);
+    }
+  }
+
+  async findDriverToken() {
+    const { value } = await Storage.get({ key: 'drivertoken' });
     if(value) {
       this.setToken(JSON.parse(value), null);
     }

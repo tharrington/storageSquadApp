@@ -9,5 +9,30 @@
 
 
 <ion-content>
-  <h1>This is where the dispatch page will go</h1>
+  <ion-list *ngIf="dispatch">
+    <ion-item (click)="goToOrder(order);" *ngFor="let order of orders"  tappable>
+      <ion-label>
+        <h2>{{order.Name}}</h2>
+        <p>Test order</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-list *ngIf="!driver">
+    <ion-item>
+      <ion-label>
+        <h2>Select a truck before working on a dispatch.</h2>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+
+  <ion-list *ngIf="!dispatch && driver">
+    <ion-item>
+      <ion-label>
+        <h2>There is no dispatch today.</h2>
+      </ion-label>
+    </ion-item>
+  </ion-list>
 </ion-content>
+`

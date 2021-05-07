@@ -10,7 +10,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 @NgModule({
-  declarations: [AppComponent, ShippingLabelsPipe],
+  declarations: [AppComponent],
   entryComponents: [],
   imports: [
     BrowserModule,
@@ -21,7 +21,7 @@ import { AppComponent } from './app.component';
   providers: [
     HTTP,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
-    ],
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
