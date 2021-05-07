@@ -1,5 +1,3 @@
-
-
 import { Injectable } from '@angular/core';
 import { Plugins, App } from '@capacitor/core';
 import { Router, NavigationExtras, ActivatedRoute } from '@angular/router';
@@ -13,8 +11,7 @@ import { Observable, throwError, from } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 
 import { HttpClient, HttpHeaders, HttpParams, HttpErrorResponse } from '@angular/common/http';
-import { HTTP } from '@ionic-native/http/ngx';
-
+// import { HTTP } from '@ionic-native/http/ngx';
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +23,7 @@ export class DataService {
   driver: any = {};
 
   constructor(
-    private http: HTTP,
+    // private http: HTTP,
     private router: Router
   ) {
     this.findToken();
@@ -39,32 +36,32 @@ export class DataService {
     }
   }
 
-  async doQuery(endpoint: string, method: string, body: any) {
-    try {
-      endpoint = this.getBaseURL() + endpoint;
-      const params = {};
-      const headers = {
-        'Content-Type': 'application/json',
-        'x-access-token': this.token
-      };
-      let response;
-      if(method === 'GET') {
-        response = await this.http.get(endpoint, params, headers);
-      } else if(method === 'POST') {
-        this.http.setDataSerializer('json');
-        response = await this.http.post(endpoint, body, headers);
-      } else if(method === 'PUT') {
-        this.http.setDataSerializer('json');
-        response = await this.http.put(endpoint, body, headers);
-      } else if(method === 'DELETE') {
-        endpoint = endpoint + '/' + body;
-        response = await this.http.delete(endpoint, params, headers);
-      }
-      return JSON.parse(response.data);
-    } catch (error) {
-      console.error('### err status: ' + JSON.stringify(error));
-    }
-  }
+  // async doQuery(endpoint: string, method: string, body: any) {
+  //   try {
+  //     endpoint = this.getBaseURL() + endpoint;
+  //     const params = {};
+  //     const headers = {
+  //       'Content-Type': 'application/json',
+  //       'x-access-token': this.token
+  //     };
+  //     let response;
+  //     if(method === 'GET') {
+  //       response = await this.http.get(endpoint, params, headers);
+  //     } else if(method === 'POST') {
+  //       this.http.setDataSerializer('json');
+  //       response = await this.http.post(endpoint, body, headers);
+  //     } else if(method === 'PUT') {
+  //       this.http.setDataSerializer('json');
+  //       response = await this.http.put(endpoint, body, headers);
+  //     } else if(method === 'DELETE') {
+  //       endpoint = endpoint + '/' + body;
+  //       response = await this.http.delete(endpoint, params, headers);
+  //     }
+  //     return JSON.parse(response.data);
+  //   } catch (error) {
+  //     console.error('### err status: ' + JSON.stringify(error));
+  //   }
+  // }
 
   async setToken(token: any, user: any) {
     this.token = token;

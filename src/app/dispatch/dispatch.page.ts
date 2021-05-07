@@ -5,6 +5,7 @@ import { Plugins } from '@capacitor/core';
 
 const { Storage } = Plugins;
 import * as moment from 'moment';
+import { HttpServiceService } from '../services/http-service.service';
 
 @Component({
   selector: 'app-dispatch',
@@ -19,7 +20,8 @@ export class DispatchPage implements OnInit {
 
   constructor(
     public dataService: DataService,
-    private router: Router
+    private router: Router,
+    private  apiService: HttpServiceService
   ) { }
 
   ngOnInit() {
@@ -44,27 +46,42 @@ export class DispatchPage implements OnInit {
     const myMoment = moment();
     myMoment.hours(0).minutes(0).seconds(0);
     const myDate = myMoment.toDate();
-    this.dataService.doQuery('/dispatches/getDispatchByDriver/' + myDate, 'GET', null).then((orders) => {
-      console.log('### got orders: ' + JSON.stringify((orders)));
-      this.orders = orders;
-
-    }).catch(err => {
-      console.log('### error in orders');
+    this.apiService.get('api/dispatches/getDispatchByDriver/' + myDate).subscribe((response: any) => {
+      console.log(response);
+      if(response.data){
+        this.orders = response.data;
+      }
+    }, err =>{
+      console.log(err);
     });
+    // this.dataService.doQuery('/dispatches/getDispatchByDriver/' + myDate, 'GET', null).then((orders) => {
+    //   console.log('### got orders: ' + JSON.stringify((orders)));
+    //   this.orders = orders;
+
+    // }).catch(err => {
+    //   console.log('### error in orders');
+    // });
   }
 
   setOrderStatus(appointment: any) {
     if(appointment.status === 'Scheduled') {
       appointment.status = 'Appointment Scheduled';
     }
-
-    this.dataService.doQuery('/orders/' + appointment._id, 'PUT', appointment).then((orders) => {
-      console.log('### got orders: ' + JSON.stringify((orders)));
-      this.orders = orders;
-      this.getOrders();
-    }).catch(err => {
-      console.log('### error in orders');
+    this.apiService.putRequest('api/orders/' + appointment._id,appointment).subscribe((response: any) => {
+      console.log(response);
+      if(response.data){
+        this.orders = response.data;
+      }
+    }, err => {
+      console.log(err);
     });
+    // this.dataService.doQuery('/orders/' + appointment._id, 'PUT', appointment).then((orders) => {
+    //   console.log('### got orders: ' + JSON.stringify((orders)));
+    //   this.orders = orders;
+    //   this.getOrders();
+    // }).catch(err => {
+    //   console.log('### error in orders');
+    // });
   }
 
 
