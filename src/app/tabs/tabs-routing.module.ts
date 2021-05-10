@@ -18,8 +18,8 @@ const routes: Routes = [
           { path: 'invoice-finalize', loadChildren: () => import('../invoice-finalize/invoice-finalize.module').then( m => m.InvoiceFinalizePageModule) }
         ]
       },
-      { path: 'search', loadChildren: () => import('../search/search-routing.module').then(m => m.SearchPageRoutingModule) },
-
+      
+      { path: 'search', loadChildren: () => import('src/app/search/search.module').then(m => m.SearchPageModule) },
     ]
   },
   { path: '', redirectTo: '/tabs/dispatch', pathMatch: 'full' }

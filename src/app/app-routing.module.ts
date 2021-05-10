@@ -13,6 +13,10 @@ const routes: Routes = [
   {
     path: 'warehouse-list',
     loadChildren: () => import('./warehouse-list/warehouse-list.module').then( m => m.WarehouseListPageModule)
+  },
+  {
+    path: 'search/detail/:id',
+    loadChildren: () => import('src/app/search/detail/detail.module').then( m => m.DetailPageModule)
   }
 ];
 @NgModule({

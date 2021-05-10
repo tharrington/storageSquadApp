@@ -24,3 +24,21 @@
 @import "~@ionic/angular/css/text-alignment.css";
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
+
+.g-box-shadow{
+    box-shadow: 0 1px 3px rgb(0 0 0 / 30%);
+}
+.g-card{
+    overflow: hidden;
+    margin: 1rem;
+    border-radius: 2px;
+    background-color: varr(--ion-color-white);
+}
+.p-0-5{
+    padding: 0.5rem;
+}
+.item-divider{
+    background-color: var(--ion-color-light);
+    color: var(--ion-color-dark);
+    padding: 0.5rem;
+}

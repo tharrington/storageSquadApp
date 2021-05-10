@@ -1,0 +1,102 @@
+<!-- <ion-header>
+  <ion-toolbar>
+    <ion-title>detail</ion-title>
+  </ion-toolbar>
+</ion-header> -->
+<app-header [isBack]="true" [title]="detail?.Pickup?.name"></app-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12" *ngIf="detail" >
+        <div class="item item-divider" ng-if="detail.Pickup && detail.Pickup.warehouseLocation && !detail.Delivery.warehouseLocation">
+          {{detail?.Pickup?.name}} • {{detail?.Pickup?.customerId}} • {{detail?.Pickup?.warehouseLocation}}
+        </div>
+  
+        <div class="item item-divider" ng-if="delivery && delivery.warehouseLocation">
+          {{detail?.Pickup?.name}} • {{detail?.Pickup?.customerId}} • {{detail?.Delivery?.warehouseLocation}}
+        </div>
+        <div class="item item-text-wrap">
+          {{detail?.Pickup?.name}} • {{detail?.Pickup?.school}} • {{detail?.Pickup?.pickupSeason}}
+        </div>
+        <div class="item item-divider">
+          Warehouse Details
+        </div>
+        <ion-item class="item-stable item-text-wrap" *ngIf="total_invoice_items >= 10" style="background-color: yellow;">
+          <h3>This is a HUGE order. Make sure to count <strong>{{total_invoice_items}}</strong> items and that all the labels are correct!</h3>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-label position="fixed">WH Location</ion-label>
+          <ion-input placeholder="Type here..."></ion-input>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-label position="fixed">WH Notes</ion-label>
+          <ion-input placeholder="Type here..."></ion-input>
+        </ion-item>
+        <!-- <ion-item lines="none">
+          <ion-label position="fixed">Bike WH Location</ion-label>
+          <ion-input placeholder="Type here..."></ion-input>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-label position="fixed">Mattress WH Location</ion-label>
+          <ion-input placeholder="Type here..."></ion-input>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-label position="fixed">Shipping WH Location</ion-label>
+          <ion-input placeholder="Type here..."></ion-input>
+        </ion-item> -->
+        <div>
+          <ion-button expand="block" shape="round">
+            Save Warehouse Info
+          </ion-button>
+        </div>
+        <div class="item item-divider">
+          Storage Invoice Details ({{total_invoice_items}} items)
+        </div>
+        <div *ngIf="detail.invoices.items.length" >
+          <ion-item *ngFor="let item of detail.invoices.items" >
+            <ion-label>
+              {{item.quantity}} • {{item.product_name}}
+            </ion-label>
+          </ion-item>
+        </div>
+        <div *ngIf="detail.invoices.imageURLs.length" class="invoice-image-wrapper" >
+          <div class="invoice-image" *ngFor="let item of detail.invoices.imageURLs">
+            <img [src]="item">
+          </div>
+        </div>
+        <div>
+          <ion-button color="tertiary" color="tertiary" expand="block" shape="round">
+            Edit Storage Invoice
+          </ion-button>
+        </div>
+        <div *ngIf="detail.Pickup && detail.Pickup.shippingUnits > 0">
+          <div class="item-divider">
+            Shipping Invoice Details ({{detail.Pickup.shippingUnits}} item<span ng-if="pickup.shippingUnits > 1">s</span>)
+          </div>
+        </div>
+        <div class="item-divider">
+          Other Info
+        </div>
+        <div class="p-0-5">
+          <ion-label>Phone - {{detail.Pickup.phone}}</ion-label>
+        </div>
+        <div>
+          <ion-button color="tertiary" expand="block" shape="round">
+            Create Shipping Labels
+          </ion-button>
+        </div>
+        <div>
+          <ion-button color="secondary" expand="block" shape="round">
+            Can't find item(s)?
+          </ion-button>
+        </div>
+        <div>
+          <ion-button color="danger" expand="block" shape="round">
+            Damaged Item(s)?
+          </ion-button>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
