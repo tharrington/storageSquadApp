@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Plugins, App } from '@capacitor/core';
 import { Router, NavigationExtras, ActivatedRoute } from '@angular/router';
-
+import * as moment from 'moment';
 const {
   Storage,
   Platform
@@ -104,4 +104,7 @@ export class DataService {
   getBaseURL() {
     return 'https://storage-squad-scheduling.herokuapp.com/api/';
   }
+  displayDate (dispatch) {
+    return moment(dispatch.dispatchDate).add(1, 'days').format('dddd, MMMM Do');
+  };
 }

@@ -32,7 +32,7 @@ export class AppComponent {
       // this.splashScreen.hide();
       if(value) {
 
-        this.router.navigateByUrl('/tabs/tabs/dispatch');
+        this.router.navigateByUrl('/tabs/dispatch');
       }
     });
   }

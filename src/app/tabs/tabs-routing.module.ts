@@ -4,7 +4,7 @@ import { TabsPage } from './tabs.page';
 
 const routes: Routes = [
   {
-    path: 'tabs',
+    path: '',
     component: TabsPage,
     children: [
       {
@@ -18,11 +18,18 @@ const routes: Routes = [
           { path: 'invoice-finalize', loadChildren: () => import('../invoice-finalize/invoice-finalize.module').then( m => m.InvoiceFinalizePageModule) }
         ]
       },
-      
       { path: 'search', loadChildren: () => import('src/app/search/search.module').then(m => m.SearchPageModule) },
+      {
+        path: 'load',
+        loadChildren: () => import('./load/load.module').then( m => m.LoadPageModule)
+      },
+      {
+        path: 'unload',
+        loadChildren: () => import('./unload/unload.module').then( m => m.UnloadPageModule)
+      }
     ]
   },
-  { path: '', redirectTo: '/tabs/dispatch', pathMatch: 'full' }
+  { path: '', redirectTo: '/dispatch', pathMatch: 'full' },
 ];
 
 @NgModule({
