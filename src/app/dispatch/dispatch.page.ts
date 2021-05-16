@@ -17,6 +17,7 @@ export class DispatchPage implements OnInit {
   orders: any;
   dispatch: any;
   testVal: boolean = true;
+  mover;
 
   constructor(
     public dataService: DataService,
@@ -34,12 +35,13 @@ export class DispatchPage implements OnInit {
     if(value) {
       this.driver = JSON.parse(value);
     }
+    this.getOrders();
   }
 
   navigateToDrivers() {
     const state = {} ;
     const navigationExtras: NavigationExtras = { state: state };
-    this.router.navigate(['/tabs/tabs/dispatch/drivers'], navigationExtras);
+    this.router.navigate(['/tabs/dispatch/drivers'], navigationExtras);
   }
 
   getOrders() {
@@ -48,8 +50,11 @@ export class DispatchPage implements OnInit {
     const myDate = myMoment.toDate();
     this.apiService.get('api/dispatches/getDispatchByDriver/' + myDate).subscribe((response: any) => {
       console.log(response);
-      if(response.data){
-        this.orders = response.data;
+      if(response.dispatch){
+        this.orders = response.dispatch.orders ? response.dispatch.orders : [];
+        this.dispatch = response.dispatch;
+        this.driver = response.dispatch.driver ? response.dispatch.driver : null;
+        this.mover = response.dispatch.mover ? response.dispatch.mover : null;
       }
     }, err =>{
       console.log(err);

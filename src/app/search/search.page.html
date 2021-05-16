@@ -19,16 +19,14 @@
         </div>
       </ion-col>
       <ion-col size="12">
-        <div>
-          <ion-item>
-            <ion-label>Pickup Season</ion-label>
-            <ion-select [(ngModel)]="pickupSeason" [value]="pickupSeason">
-              <ion-select-option value="Current">Current</ion-select-option>
-              <ion-select-option value="ALL">ALL</ion-select-option>
-            </ion-select>
-          </ion-item>
-        </div>
-        <div class="ion-padding">
+        <ion-item>
+          <ion-label>Pickup Season</ion-label>
+          <ion-select [(ngModel)]="pickupSeason" [value]="pickupSeason">
+            <ion-select-option value="Current">Current</ion-select-option>
+            <ion-select-option value="ALL">ALL</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <div class="ion-padding-top ion-padding-horizontal">
           <ion-label color="primary">
             {{customers.length > 0 ? customers.length + ' Result' : 'No result found'}}
           </ion-label>

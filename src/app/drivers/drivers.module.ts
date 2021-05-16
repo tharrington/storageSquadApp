@@ -7,13 +7,14 @@ import { IonicModule } from '@ionic/angular';
 import { DriversPageRoutingModule } from './drivers-routing.module';
 
 import { DriversPage } from './drivers.page';
-
+import { SharedModule } from 'src/app/components/shared.module';
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    DriversPageRoutingModule
+    DriversPageRoutingModule,
+    SharedModule
   ],
   declarations: [DriversPage]
 })

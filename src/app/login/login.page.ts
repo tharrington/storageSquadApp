@@ -40,7 +40,7 @@ export class LoginPage implements OnInit {
         this.dataService.setToken(response.token, response.user);
         Storage.set({ key : 'token', value : JSON.stringify(response.token) });
         Storage.set({ key : 'user', value : JSON.stringify(response.user) });
-        this.router.navigateByUrl('/tabs/tabs/dispatch');
+        this.router.navigateByUrl('/tabs/dispatch');
       }
     }, err => {
       console.log(err.status);
@@ -61,7 +61,7 @@ export class LoginPage implements OnInit {
     //     console.log('### setting token: ' + JSON.stringify(data.data.token));
     //     Storage.set({ key : 'token', value : JSON.stringify(respBody.token) });
     //     Storage.set({ key : 'user', value : JSON.stringify(respBody.user) });
-    //     this.router.navigateByUrl('/tabs/tabs/dispatch');
+    //     this.router.navigateByUrl('/tabs/dispatch');
     //   })
     //   .catch(error => {
 

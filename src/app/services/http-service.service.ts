@@ -13,7 +13,7 @@ export class HttpServiceService {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        'x-access-token': (localStorage.getItem('token') ? localStorage.getItem('token') : '')
+        'x-access-token': this.token
       })
     };
     return this.http.get(`${environment.baseUrl}${endpoint}`,httpOptions);
@@ -22,7 +22,7 @@ export class HttpServiceService {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        'x-access-token': (localStorage.getItem('token') ? localStorage.getItem('token') : '')
+        'x-access-token': this.token
       })
     };
     return this.http.post(`${environment.baseUrl}${endpoint}`,JSON.stringify(data),httpOptions)
@@ -31,7 +31,7 @@ export class HttpServiceService {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        'x-access-token': (localStorage.getItem('token') ? localStorage.getItem('token') : '')
+        'x-access-token': this.token
       })
     };
     return this.http.put(`${environment.baseUrl}${endpoint}`, JSON.stringify(data), httpOptions);
@@ -40,9 +40,19 @@ export class HttpServiceService {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        'x-access-token': (localStorage.getItem('token') ? localStorage.getItem('token') : '')
+        'x-access-token': this.token
       })
     };
     return this.http.delete(`${environment.baseUrl}/${url}`, httpOptions);
+  }
+  private get token() {
+    let token = '';
+    if(localStorage.getItem('token')) {
+      if(localStorage.getItem('drivertoken')){
+        return localStorage.getItem('drivertoken');
+      }
+      return localStorage.getItem('token');
+    }
+    return token;
   }
 }

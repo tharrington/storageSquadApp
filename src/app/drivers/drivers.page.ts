@@ -4,6 +4,8 @@ import { Plugins } from '@capacitor/core';
 import {NavigationExtras, Router} from '@angular/router';
 // import {HTTP} from '@ionic-native/http/ngx';
 import { HttpServiceService } from '../services/http-service.service';
+import { Location } from '@angular/common';
+import { LoaderService } from '../services/loader.service';
 
 const { Storage } = Plugins;
 
@@ -13,59 +15,58 @@ const { Storage } = Plugins;
   styleUrls: ['./drivers.page.scss'],
 })
 export class DriversPage implements OnInit {
-  drivers: any = [];
+  drivers = [];
+  selectedDriver;
+  isLoading = true;
   constructor(
     public dataService: DataService, 
     private router: Router, 
-    // private http: HTTP,
-    private apiService: HttpServiceService) { }
+    private apiService: HttpServiceService,
+    private location: Location,
+    private loader: LoaderService) { }
 
   ngOnInit() {
+    this.driver();
     this.apiService.get('api/users/driversByRegion').subscribe((response: any) => {
       console.log(response);
-      if(response.data){
-        this.drivers = response.data;
+      if(response){
+        this.drivers = response;
       }
+      this.isLoading = false;
     },err => {
       console.log(err);
+      this.isLoading = false;
     });
-    // this.dataService.doQuery('users/driversByRegion', 'GET', null).then((drivers) => {
-    //   this.drivers = drivers;
-    // }).catch(err => {
-    // });
   }
-
+  async driver() {
+    const { value } = await Storage.get({ key: 'driver' });
+    if(value) {
+      this.selectedDriver = JSON.parse(value);
+    }
+  }
   selectDriver(driver: any) {
-    Storage.set({ key : 'driver', value : JSON.stringify(driver) });
-    // this.login(driver);
+    this.login(driver);
   }
-
-
-  // async login(driver: any) {
-  //   const endpoint = 'https://storage-squad-scheduling.herokuapp.com/auth/local';
-  //   console.log('### driver: ' + JSON.stringify(driver));
-  //   const body = {
-  //     email: driver.Email,
-  //     password: 'Storage1'
-  //   };
-
-  //   this.http.post(endpoint, body, {})
-  //     .then(data => {
-  //       this.dataService.setDriverToken(data.data.token, data.data.user);
-  //       console.log(data.status);
-  //       console.log('### driver data: ' + data.data); // data received by server
-  //       console.log(data.headers);
-  //       const respBody = JSON.parse(data.data);
-  //       console.log('### setting token: ' + JSON.stringify(data.data.token));
-  //       Storage.set({ key : 'drivertoken', value : JSON.stringify(respBody.token) });
-  //       Storage.set({ key : 'driver', value : JSON.stringify(respBody.user) });
-  //       this.router.navigateByUrl('/tabs/tabs/dispatch');
-  //     })
-  //     .catch(error => {
-  //       console.log(error.status);
-  //       console.log(error.error); // error message as string
-  //       console.log(error.headers);
-  //     });
-  // }
+  async login(driver: any) {
+    const body = {
+      email: driver.email,
+      password: 'Storage1'
+    };
+    this.loader.presentLoading();
+    this.apiService.post('auth/local', body).subscribe((response: any) => {
+      console.log(response);
+      if(response.token) {
+        localStorage.setItem('drivertoken',response.token);
+        this.dataService.setToken(response.token, response.user);
+        Storage.set({ key : 'drivertoken', value : JSON.stringify(response.token) });
+        Storage.set({ key : 'driver', value : JSON.stringify(response.user) });
+        this.loader.hideLoading();
+        this.location.back();
+      }
+    }, err => {
+      this.loader.hideLoading();
+      console.log(err); 
+    });
+  }
 
 }

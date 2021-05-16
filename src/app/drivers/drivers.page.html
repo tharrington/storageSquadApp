@@ -1,18 +1,28 @@
-<ion-header>
-  <ion-toolbar>
 
-    <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
-    </ion-buttons>
-
-
-    <ion-title>Select Truck</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-header [isBack]="true" [title]="'Select Truck'"></app-header>
 
 <ion-content>
-
+  <ng-container *ngIf="selectedDriver" >
+    <ion-item>
+      <ion-label>
+        <h2>
+          <ion-text color="primary">
+            {{selectedDriver.name}}
+          </ion-text>
+        </h2>
+        <p>
+          <ion-text color="medium">Selected Truck</ion-text>
+        </p>
+      </ion-label>
+    </ion-item>
+  </ng-container>
+  <div *ngIf="isLoading">
+    <app-loading></app-loading>
+  </div>
   <ion-list>
+    <div class="ion-padding ion-text-center" *ngIf="drivers.length" >
+      <ion-label>Check schedule for your assigned truck.</ion-label>
+    </div>
     <ng-container *ngFor="let driver of drivers">
       <ion-item (click)="selectDriver(driver);" tappable>
         <ion-label>

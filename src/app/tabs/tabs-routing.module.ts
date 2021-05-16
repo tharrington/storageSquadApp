@@ -11,11 +11,11 @@ const routes: Routes = [
         path: 'dispatch',
         children : [
           { path: '', loadChildren: () => import('../dispatch/dispatch.module').then(m => m.DispatchPageModule) },
-          { path: 'drivers', loadChildren: () => import('../drivers/drivers.module').then(m => m.DriversPageModule) },
-          { path: 'shipping-labels', loadChildren: () => import('../shipping-labels/shipping-labels.module').then( m => m.ShippingLabelsPageModule) },
-          { path: 'order',  loadChildren: () => import('../order/order.module').then( m => m.OrderPageModule) },
-          { path: 'invoice-create', loadChildren: () => import('../invoice-create/invoice-create.module').then( m => m.InvoiceCreatePageModule) },
-          { path: 'invoice-finalize', loadChildren: () => import('../invoice-finalize/invoice-finalize.module').then( m => m.InvoiceFinalizePageModule) }
+          // { path: 'drivers', loadChildren: () => import('../drivers/drivers.module').then(m => m.DriversPageModule) },
+          // { path: 'shipping-labels', loadChildren: () => import('../shipping-labels/shipping-labels.module').then( m => m.ShippingLabelsPageModule) },
+          // { path: 'order',  loadChildren: () => import('../order/order.module').then( m => m.OrderPageModule) },
+          // { path: 'invoice-create', loadChildren: () => import('../invoice-create/invoice-create.module').then( m => m.InvoiceCreatePageModule) },
+          // { path: 'invoice-finalize', loadChildren: () => import('../invoice-finalize/invoice-finalize.module').then( m => m.InvoiceFinalizePageModule) }
         ]
       },
       { path: 'search', loadChildren: () => import('src/app/search/search.module').then(m => m.SearchPageModule) },
