@@ -18,7 +18,9 @@ export class UnloadPage implements OnInit {
   ) { 
     this.fetchData();
   }
-
+  ionViewWillEnter(){
+    console.log('ionViewWillEnter is working?');
+  }
   ngOnInit() {
   }
   fetchData(){

@@ -14,7 +14,9 @@
             *ngFor="let dispatch of loads" 
             button 
             (click)="detail(dispatch)">
-            <h2>{{ dataService.displayDate(dispatch) }} ({{dispatch.warehouseStatus}} - {{dispatch.delivery_count}} orders)</h2>
+            <ion-label>
+              <h2>{{ dataService.displayDate(dispatch) }} ({{dispatch.warehouseStatus}} - {{dispatch.delivery_count}} orders)</h2>
+            </ion-label>
           </ion-item>
         </ion-list>
       </ion-col>

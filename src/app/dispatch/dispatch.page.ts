@@ -59,13 +59,6 @@ export class DispatchPage implements OnInit {
     }, err =>{
       console.log(err);
     });
-    // this.dataService.doQuery('/dispatches/getDispatchByDriver/' + myDate, 'GET', null).then((orders) => {
-    //   console.log('### got orders: ' + JSON.stringify((orders)));
-    //   this.orders = orders;
-
-    // }).catch(err => {
-    //   console.log('### error in orders');
-    // });
   }
 
   setOrderStatus(appointment: any) {
@@ -80,13 +73,6 @@ export class DispatchPage implements OnInit {
     }, err => {
       console.log(err);
     });
-    // this.dataService.doQuery('/orders/' + appointment._id, 'PUT', appointment).then((orders) => {
-    //   console.log('### got orders: ' + JSON.stringify((orders)));
-    //   this.orders = orders;
-    //   this.getOrders();
-    // }).catch(err => {
-    //   console.log('### error in orders');
-    // });
   }
 
 
