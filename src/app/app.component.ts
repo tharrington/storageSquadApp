@@ -22,7 +22,8 @@ export class AppComponent {
 
   async findToken() {
     const { value } = await Storage.get({ key: 'token' });
-    console.log('### got value: ' + value);
+    //console.log('### got value: ' + value);
+    this.dataService.setIsTraining();
     this.initializeApp(value);
   }
 

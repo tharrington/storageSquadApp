@@ -7,7 +7,7 @@ const {
   Platform
 } = Plugins;
 
-import { Observable, throwError, from } from 'rxjs';
+import { Observable, throwError, from, BehaviorSubject } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 
 import { HttpClient, HttpHeaders, HttpParams, HttpErrorResponse } from '@angular/common/http';
@@ -21,9 +21,8 @@ export class DataService {
   driverToken: string;
   user: {};
   driver: any = {};
-
+  private _isTraining = new BehaviorSubject<boolean>(false);
   constructor(
-    // private http: HTTP,
     private router: Router
   ) {
     this.findToken();
@@ -35,34 +34,26 @@ export class DataService {
       return await JSON.parse(value);
     }
   }
-
-  // async doQuery(endpoint: string, method: string, body: any) {
-  //   try {
-  //     endpoint = this.getBaseURL() + endpoint;
-  //     const params = {};
-  //     const headers = {
-  //       'Content-Type': 'application/json',
-  //       'x-access-token': this.token
-  //     };
-  //     let response;
-  //     if(method === 'GET') {
-  //       response = await this.http.get(endpoint, params, headers);
-  //     } else if(method === 'POST') {
-  //       this.http.setDataSerializer('json');
-  //       response = await this.http.post(endpoint, body, headers);
-  //     } else if(method === 'PUT') {
-  //       this.http.setDataSerializer('json');
-  //       response = await this.http.put(endpoint, body, headers);
-  //     } else if(method === 'DELETE') {
-  //       endpoint = endpoint + '/' + body;
-  //       response = await this.http.delete(endpoint, params, headers);
-  //     }
-  //     return JSON.parse(response.data);
-  //   } catch (error) {
-  //     console.error('### err status: ' + JSON.stringify(error));
-  //   }
-  // }
-
+  async getStorage(key: string) {
+    const { value } = await Storage.get({ key });
+    if(value) {
+      return await JSON.parse(value);
+    }
+  }
+  async setIsTraining() {
+    const mover = await this.getDriver();
+    if(mover) {
+      this._isTraining.next(true);
+    } else {
+      this._isTraining.next(false);
+    }
+  }
+  get isTraining(): Observable<boolean> {
+    return this._isTraining.asObservable();
+  }
+  get isTrainingValue() {
+    return this._isTraining.value;
+  }
   async setToken(token: any, user: any) {
     this.token = token;
     if(!user) {

@@ -6,9 +6,10 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-
-
 <ion-content>
+  <div class="isTraning" *ngIf="dataService.isTraining | async" >
+    <ion-label>Training Mode</ion-label>
+  </div>
   <div *ngIf="dispatch && dispatch._id" >
     <ion-item lines="none">
       <ion-label>
@@ -32,7 +33,42 @@
   <div class="ion-padding">
     <ion-label color="primary">Today's schedule</ion-label>
   </div>
-  <ng-container class="ion-padding" *ngIf="dispatch">
+  <div class="list" *ngIf="dispatch._id && dispatch.status == 'New'">
+    <!-- <div class="list"> -->
+    <div class="item item-body">
+      <div class="ion-text-center f-bold">
+        <ion-label color="primary">First Appointment</ion-label>
+      </div>
+      <p>{{
+        (dispatch.orders[0].building && dispatch.orders[0].building != 'MY BUILDING IS NOT LISTED') ?
+        dispatch.orders[0].building + ' @ ' + dispatch.orders[0].deliveryTime : 
+        dispatch.orders[0].address + ' @ ' + dispatch.orders[0].deliveryTime
+      }}</p>
+      <!-- <p class="ion-text-center">I write text for testing @ 123 size</p> -->
+    </div>
+    <div class="ion-text-center ion-margin-bottom">
+      <div class="ion-text-center f-bold">
+        <ion-label color="primary">
+          Total Pickups
+        </ion-label>
+      </div>
+      <p class="ion-text-center">{{pickupCount}}</p>
+    </div>
+    <div class="item item-body ion-margin-bottom">
+      <div class="ion-text-center f-bold">
+        <ion-label color="primary">
+          Total Deliveries
+        </ion-label>
+      </div>
+      <p class="ion-text-center">{{deliveryCount}}</p>
+    </div>
+    <div class="ion-text-center">
+      <ion-button shape="round" (click)="startDispatch()">
+        <ion-label>Start Route</ion-label>
+      </ion-button>
+    </div>
+  </div>
+  <!-- <ng-container class="ion-padding" *ngIf="dispatch">
     <div (click)="goToOrder(order);" *ngFor="let order of orders">
       <div class="ion-margin-bottom ion-padding-horizontal">
         Address: {{order?.address}}
@@ -42,7 +78,7 @@
         {{order?.guartanteedTime}}
       </div>
     </div>
-  </ng-container>
+  </ng-container> -->
   <!-- <ion-list *ngIf="dispatch">
     <ion-item (click)="goToOrder(order);" *ngFor="let order of orders"  tappable>
       <ion-label>

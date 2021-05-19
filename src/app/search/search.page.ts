@@ -21,7 +21,7 @@ export class SearchPage implements OnInit {
   ngOnInit() {
   }
   searchCustomer(event){
-    if(!event.detail.value){
+    if(event.detail.value.length < 3){
       return;
     }
     const url = `api/invoices/search/${event.detail.value}?pickupSeason=${this.pickupSeason}`
@@ -29,8 +29,7 @@ export class SearchPage implements OnInit {
     this.apiService.get(url).subscribe((response: any) => {
       if(response){
         this.customers = [...response];
-        console.log(this.customers);
-       
+        //console.log(this.customers);
       }
       this.loader.hideLoading();
     }, err => {

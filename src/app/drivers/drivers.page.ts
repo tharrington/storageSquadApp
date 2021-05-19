@@ -60,6 +60,7 @@ export class DriversPage implements OnInit {
         this.dataService.setToken(response.token, response.user);
         Storage.set({ key : 'drivertoken', value : JSON.stringify(response.token) });
         Storage.set({ key : 'driver', value : JSON.stringify(response.user) });
+        this.dataService.setIsTraining();
         this.loader.hideLoading();
         this.location.back();
       }

@@ -47,3 +47,27 @@
     align-items: center;
     justify-content: center;
 }
+.isTraning{
+    padding: 0.5rem;
+    background: var(--ion-color-danger);
+    color: var(--ion-color-light);
+    text-align: center;
+}
+.f-bold{
+    font-weight: bold;
+}
+.f-1-5{
+    font-size: 1.5rem;
+}
+.f-1{
+    font-size: 1rem;
+}
+.show-text-modal{
+    --width: 70vw;
+    // height: 45vh;
+    // top: 30vh;
+    --border-radius: 1rem;
+    .modal-wrapper{
+        height: 45vh;
+    }
+}

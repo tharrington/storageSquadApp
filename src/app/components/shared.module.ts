@@ -4,11 +4,13 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from './header/header.component';
 import { LoadingComponent } from './loading/loading.component';
+import { ShowTextComponent } from './show-text/show-text.component';
 
 @NgModule({
   declarations: [
     HeaderComponent,
-    LoadingComponent
+    LoadingComponent,
+    ShowTextComponent
   ],
   imports: [
     CommonModule,
