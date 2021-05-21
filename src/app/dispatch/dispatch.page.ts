@@ -17,13 +17,32 @@ import { LoaderService } from '../services/loader.service';
 })
 export class DispatchPage implements OnInit {
   driver: any;
-  orders: any;
+  completedOrders = [];
+  rescheduledOrders = [];
+  canceledOrders = [];
+  flaggedOrders = [];
+  total_orders = 0;
+  orders = [];
   dispatch: any;
   testVal: boolean = true;
   mover;
   pickupCount = 0;
   dispatchUpdates = [];
   deliveryCount = 0;
+  orderUpdates = [
+    { status : 'Scheduled' },
+  	{ status : 'En Route' },
+  	{ status : 'Arrived' },
+    { status : 'Servicing' },
+    { status : 'Packed' }
+  ];
+  deliveryUpdates = [
+    { status : 'Scheduled' },
+    { status : 'En Route' },
+    { status : 'Arrived' },
+    { status : 'Servicing' },
+    { status : 'Packed' }
+  ];
   constructor(
     public dataService: DataService,
     private router: Router,
@@ -68,10 +87,11 @@ export class DispatchPage implements OnInit {
     this.apiService.get('api/dispatches/getDispatchByDriver/' + myDate).subscribe((response: any) => {
       console.log(response);
       if(response.dispatch){
-        this.orders = response.dispatch.orders ? response.dispatch.orders : [];
+        //this.orders = response.dispatch.orders ? response.dispatch.orders : [];
         this.dispatch = response.dispatch;
         this.driver = response.dispatch.driver ? response.dispatch.driver : null;
         this.mover = response.dispatch.mover ? response.dispatch.mover : null;
+        this.checkStatus();
         this.dispatch.orders.forEach( (entry) => {
           if(entry.type == 'Pickup') {
             this.pickupCount++;
@@ -79,31 +99,88 @@ export class DispatchPage implements OnInit {
             this.deliveryCount++;
           } 
         });
+
+        if(this.dispatch && this.dispatch.orders) {
+          this.total_orders = 0;
+          this.dispatch.orders.forEach((entry) => {
+            var today = moment();
+            var delDate = moment(entry.deliveryDate).add(3, 'h');
+  
+            // Make sure the order date is the same day as the current date.
+            if(today.isSame(delDate, 'day')) {
+              this.total_orders++;
+              if(entry.status == 'Complete' || entry.status == 'Complete - Loaded') {
+                this.completedOrders.push(entry);
+              } else if(entry.status == 'Rescheduled') {
+                this.rescheduledOrders.push(entry);
+              } else if(entry.status == 'Canceled') {
+                this.canceledOrders.push(entry);
+              } else if(entry.status == 'Flagged') {
+                this.flaggedOrders.push(entry);
+              } else if(entry.warehouseStatus != 'Missing') {
+                this.orders.push(entry);
+              }
+            }
+            if(entry.status == 'Appointment Scheduled') {
+              entry.status = 'Scheduled';
+            }
+          });
+        }
+
+
       }
     }, err =>{
       console.log(err);
     });
   }
-
+  fetchOrders() {
+  	this.orders = [];
+  	this.completedOrders = [];
+  	this.flaggedOrders = [];
+  	this.rescheduledOrders = [];
+    this.canceledOrders = [];
+  	this.dispatch = {};
+  	this.getOrders();
+  }
   setOrderStatus(appointment: any) {
     if(appointment.status === 'Scheduled') {
       appointment.status = 'Appointment Scheduled';
     }
+    this.loader.presentLoading('Order Saved');
     this.apiService.putRequest('api/orders/' + appointment._id,appointment).subscribe((response: any) => {
       console.log(response);
-      if(response.data){
-        this.orders = response.data;
+      this.loader.hideLoading();
+      if(appointment.status == 'Appointment Scheduled') {
+        appointment.status = 'Scheduled';
       }
+      this.fetchOrders();
     }, err => {
       console.log(err);
+      this.loader.hideLoading();
     });
   }
+  containsRoomService (value) {
+    if(value && value.includes("Room Service")) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  substringField(value) {
+  	if(!value) return 'Not declared';
+  	if(value.length < 10) return value;
 
+    if(value.length < 30) return value.substring(0, value.length - 1);
+  	return value.substring(0, 30);
+  }
 
   goToOrder(order: any) {
 
   }
-
+  goToOrderWithId(id) {
+    console.log(id);
+    // href="#/app/orders/{{appointment._id}}"
+  }
   async startDispatch() {
     const modal = await this.modalController.create({
       component: ShowTextComponent,
@@ -147,15 +224,15 @@ export class DispatchPage implements OnInit {
   }
   setDispatchStatus () {
     this.loader.presentLoading();
-    this.apiService.putRequest(`api/dispatches/${this.dispatch._id}`, this.dispatch).subscribe((response) => {
+    this.apiService.patchRequest(`api/dispatches/${this.dispatch._id}`, this.dispatch).subscribe((response) => {
       if(this.dispatch.status == 'Start') {
         this.dispatch.status = 'On Time';
       }
+      this.checkStatus();
       this.loader.hideLoading();
     }, err => {
       this.loader.hideLoading();
       console.log(err);
     });
-	  this.checkStatus();
   }
 }

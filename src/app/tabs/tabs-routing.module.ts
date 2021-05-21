@@ -26,10 +26,11 @@ const routes: Routes = [
       {
         path: 'unload',
         loadChildren: () => import('./unload/unload.module').then( m => m.UnloadPageModule)
-      }
+      },
+      { path: '', redirectTo: 'tabs/dispatch', pathMatch: 'full' },
     ]
   },
-  { path: '', redirectTo: '/dispatch', pathMatch: 'full' },
+  { path: '', redirectTo: 'tabs/dispatch', pathMatch: 'full' },
 ];
 
 @NgModule({

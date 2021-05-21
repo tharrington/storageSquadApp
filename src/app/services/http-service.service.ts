@@ -36,6 +36,15 @@ export class HttpServiceService {
     };
     return this.http.put(`${environment.baseUrl}${endpoint}`, JSON.stringify(data), httpOptions);
   }
+  public patchRequest(endpoint: string, data: any) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'x-access-token': this.token
+      })
+    };
+    return this.http.patch(`${environment.baseUrl}${endpoint}`, JSON.stringify(data), httpOptions);
+  }
   public delRequest(url: string) {
     const httpOptions = {
       headers: new HttpHeaders({
