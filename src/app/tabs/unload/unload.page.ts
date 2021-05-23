@@ -1,16 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DataService } from 'src/app/api/data.service';
 import { HttpServiceService } from 'src/app/services/http-service.service';
 import { LoaderService } from 'src/app/services/loader.service';
 import * as moment from 'moment';
+import { Subscription, VirtualTimeScheduler } from 'rxjs';
 @Component({
   selector: 'app-unload',
   templateUrl: './unload.page.html',
   styleUrls: ['./unload.page.scss'],
 })
-export class UnloadPage implements OnInit {
-
+export class UnloadPage implements OnInit, OnDestroy {
+  unSub: Subscription;
   unloads = [];
+  selectedDriver;
+  drivers = [];
   constructor(
     private loader: LoaderService,
     private apiService: HttpServiceService,
@@ -18,10 +21,31 @@ export class UnloadPage implements OnInit {
   ) { 
     this.fetchData();
   }
+  ngOnDestroy(): void {
+    if(this.unSub){
+      this.unSub.unsubscribe();
+    }
+  }
   ionViewWillEnter(){
     console.log('ionViewWillEnter is working?');
   }
   ngOnInit() {
+    this.unSub = this.dataService.driverSub.subscribe((response) => {
+      if(response){
+        this.selectedDriver = response;
+        this.getDrivers();
+      }
+    });
+  }
+  getDrivers() {
+    this.apiService.get('api/users/driversByRegion').subscribe((response: any) => {
+      console.log(response);
+      if(response){
+        this.drivers = response;
+      }
+    }, err =>{
+      console.log(err);
+    });
   }
   fetchData(){
     let myMoment = moment();
@@ -60,6 +84,13 @@ export class UnloadPage implements OnInit {
       console.log(err);
       this.loader.hideLoading();
     });
+    }
+  loginDriver(event){
+    const value = this.drivers.find(item => item._id === event.target.value);
+    //console.log(value);
+    if(value.email){
+      this.dataService.loginDriver(value.email, false);
+    }
   }
   detail(dispatch){
     console.log(dispatch);

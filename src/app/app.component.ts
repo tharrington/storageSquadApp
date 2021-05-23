@@ -22,8 +22,8 @@ export class AppComponent {
 
   async findToken() {
     const { value } = await Storage.get({ key: 'token' });
-    //console.log('### got value: ' + value);
     this.initializeApp(value);
+    this.dataService.initDriver();
     this.dataService.setIsTraining();
   }
 

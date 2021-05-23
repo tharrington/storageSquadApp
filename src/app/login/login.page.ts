@@ -37,7 +37,7 @@ export class LoginPage implements OnInit {
       console.log(response);
       if(response.token) {
         localStorage.setItem('token',response.token);
-        this.dataService.setToken(response.token, response.user);
+        // this.dataService.setToken(response.token, response.user);
         Storage.set({ key : 'token', value : JSON.stringify(response.token) });
         Storage.set({ key : 'user', value : JSON.stringify(response.user) });
         this.router.navigateByUrl('/tabs/dispatch');

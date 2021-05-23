@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DataService } from '../api/data.service';
 import { Plugins } from '@capacitor/core';
 import {NavigationExtras, Router} from '@angular/router';
@@ -6,6 +6,7 @@ import {NavigationExtras, Router} from '@angular/router';
 import { HttpServiceService } from '../services/http-service.service';
 import { Location } from '@angular/common';
 import { LoaderService } from '../services/loader.service';
+import { Subscription } from 'rxjs';
 
 const { Storage } = Plugins;
 
@@ -14,21 +15,28 @@ const { Storage } = Plugins;
   templateUrl: './drivers.page.html',
   styleUrls: ['./drivers.page.scss'],
 })
-export class DriversPage implements OnInit {
+export class DriversPage implements OnInit, OnDestroy {
   drivers = [];
   selectedDriver;
   isLoading = true;
+  unSub: Subscription;
   constructor(
     public dataService: DataService, 
     private router: Router, 
     private apiService: HttpServiceService,
     private location: Location,
-    private loader: LoaderService) { }
+    private loader: LoaderService) {
+     }
+  ngOnDestroy(): void {
+    if(this.unSub){
+      this.unSub.unsubscribe();
+    }
+  }
 
   ngOnInit() {
     this.driver();
-    this.apiService.get('api/users/driversByRegion').subscribe((response: any) => {
-      console.log(response);
+    this.apiService.get('api/users/driversByRegion',true).subscribe((response: any) => {
+      //console.log(response);
       if(response){
         this.drivers = response;
       }
@@ -39,35 +47,37 @@ export class DriversPage implements OnInit {
     });
   }
   async driver() {
-    const { value } = await Storage.get({ key: 'driver' });
-    if(value) {
-      this.selectedDriver = JSON.parse(value);
-    }
+    this.unSub = this.dataService.driverSub.subscribe(response => {
+      if(response){
+        this.selectedDriver = response;
+      }
+    })
   }
   selectDriver(driver: any) {
     this.login(driver);
   }
   async login(driver: any) {
-    const body = {
-      email: driver.email,
-      password: 'Storage1'
-    };
-    this.loader.presentLoading();
-    this.apiService.post('auth/local', body).subscribe((response: any) => {
-      console.log(response);
-      if(response.token) {
-        localStorage.setItem('drivertoken',response.token);
-        this.dataService.setToken(response.token, response.user);
-        Storage.set({ key : 'drivertoken', value : JSON.stringify(response.token) });
-        Storage.set({ key : 'driver', value : JSON.stringify(response.user) });
-        this.dataService.setIsTraining();
-        this.loader.hideLoading();
-        this.location.back();
-      }
-    }, err => {
-      this.loader.hideLoading();
-      console.log(err); 
-    });
+    // const body = {
+    //   email: driver.email,
+    //   password: 'Storage1'
+    // };
+    this.dataService.loginDriver(driver.email, true);
+    // this.loader.presentLoading();
+    // this.apiService.post('auth/local', body).subscribe((response: any) => {
+    //   console.log(response);
+    //   if(response.token) {
+    //     localStorage.setItem('drivertoken',response.token);
+    //     this.dataService.setToken(response.token, response.user);
+    //     // Storage.set({ key : 'drivertoken', value : JSON.stringify(response.token) });
+    //     Storage.set({ key : 'driver', value : JSON.stringify(response.user) });
+    //     this.dataService.setIsTraining();
+    //     this.loader.hideLoading();
+    //     this.location.back();
+    //   }
+    // }, err => {
+    //   this.loader.hideLoading();
+    //   console.log(err); 
+    // });
   }
 
 }

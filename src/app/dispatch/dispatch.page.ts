@@ -43,6 +43,22 @@ export class DispatchPage implements OnInit {
     { status : 'Servicing' },
     { status : 'Packed' }
   ];
+  orderUpdatesComplete = [
+    { status : 'Scheduled', value : 'Scheduled' },
+    { status : 'En Route', value : 'En Route' },
+    { status : 'Arrived', value : 'Arrived' },
+    { status : 'Servicing', value : 'Servicing' },
+    { status : 'Complete', value : 'Complete' },
+    { status : 'Complete - Loaded', value : 'Complete - Loaded' }
+  ];
+  canceledStatuses = [
+    { status : 'Scheduled' }, 
+    { status : 'En Route' },
+    { status : 'Arrived' },
+    { status : 'Servicing' },
+    { status : 'Complete' },
+    { status : 'Canceled' },
+  ];
   constructor(
     public dataService: DataService,
     private router: Router,
@@ -57,10 +73,10 @@ export class DispatchPage implements OnInit {
   }
 
   async loadLastDriver() {
-    const { value } = await Storage.get({ key: 'driver' });
-    if(value) {
-      this.driver = JSON.parse(value);
-    }
+    // const { value } = await Storage.get({ key: 'driver' });
+    // if(value) {
+    //   this.driver = JSON.parse(value);
+    // }
     this.getOrders();
   }
 
@@ -86,7 +102,7 @@ export class DispatchPage implements OnInit {
     const myDate = myMoment.toDate();
     this.apiService.get('api/dispatches/getDispatchByDriver/' + myDate).subscribe((response: any) => {
       console.log(response);
-      if(response.dispatch){
+      if(response && response.dispatch){
         //this.orders = response.dispatch.orders ? response.dispatch.orders : [];
         this.dispatch = response.dispatch;
         this.driver = response.dispatch.driver ? response.dispatch.driver : null;
